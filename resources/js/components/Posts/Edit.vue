@@ -1,6 +1,6 @@
 <template>
-    <form @submit.prevent="storePost(post)">
-        <!-- Title -->
+    <form @submit.prevent="updatePost(post)">
+    <!-- Title -->
         <div>
             <label for="post-title" class="block text-sm font-medium text-gray-700">
                 Title
@@ -44,19 +44,6 @@
             </div>
         </div>
 
-        <!-- Thumbnail -->
-<!--        <div class="mt-4">-->
-<!--            <label for="thumbnail" class="block font-medium text-sm text-gray-700">-->
-<!--                Thumbnail-->
-<!--            </label>-->
-<!--            <input @change="post.thumbnail = $event.target.files[0]" type="file" id="thumbnail" />-->
-<!--            <div class="text-red-600 mt-1">-->
-<!--                <div v-for="message in validationErrors?.thumbnail">-->
-<!--                    {{ message }}-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
         <!-- Buttons -->
         <div class="mt-4">
             <button :disabled="isLoading" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm uppercase text-white disabled:opacity-75 disabled:cursor-not-allowed">
@@ -67,23 +54,18 @@
         </div>
     </form>
 </template>
-
 <script setup>
-import { onMounted, reactive } from 'vue';
-import useCategories from '@/composables/categories';
-import usePosts from '@/composables/posts';
-
-const post = reactive({
-    title: '',
-    content: '',
-    category_id: ''//,
-    // thumbnail: ''
-})
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
+import useCategories from "@/composables/categories";
+import usePosts from "@/composables/posts";
 
 const { categories, getCategories } = useCategories()
-const { storePost, validationErrors, isLoading } = usePosts()
+const { post, getPost,updatePost, validationErrors, isLoading } = usePosts()
+const route = useRoute()
 
 onMounted(() => {
+    getPost(route.params.id)
     getCategories()
 })
 </script>
